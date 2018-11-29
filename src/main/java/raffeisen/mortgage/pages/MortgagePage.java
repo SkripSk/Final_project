@@ -50,6 +50,10 @@ public class MortgagePage extends BasePage{
     @FieldName(name = "Знаю свою ипотечную программу")
     public WebElement isProgram;
 
+    @FindBy(xpath = "//h1[@class='e-title e-title--h2']")
+    @FieldName(name = "Заголовок")
+    public WebElement title;
+
     public void fillField(String name, String value) throws Exception {
         WebElement element = getField(name);
         fillField(element, value);
@@ -58,7 +62,11 @@ public class MortgagePage extends BasePage{
     public void click(String name) throws Exception {
         WebElement element = getField(name);
         click(element);
-        DriverManager.getDriver().manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+    }
+
+    public void scrollAndClick(String name) throws Exception {
+        WebElement element = getField(name);
+        scrollAndClick(element);
     }
 
     public WebElement getField(String name) throws Exception {
@@ -71,6 +79,11 @@ public class MortgagePage extends BasePage{
         }
         Assert.fail("Не объявлен элемент с наименованием " + name);
         return null;
+    }
+
+    public void assertText(String name, String value) throws Exception {
+        WebElement element = getField(name);
+        Assert.assertEquals(value, element.getText());
     }
 
 }

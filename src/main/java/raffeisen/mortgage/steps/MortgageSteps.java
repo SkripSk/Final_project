@@ -10,13 +10,18 @@ public class MortgageSteps {
 
     @When("выпадающий список \"(.*)\" заполняется значением \"(.*)\"")
     public void selectInput(String field, String value) throws Exception {
-
         WebElement element = mortgagePage.getField(field);
         mortgagePage.selectInput(element, value);
     }
 
-    @When("Отмечен чекбокс - \"(.*)\"")
+    @When("отмечен чекбокс - \"(.*)\"")
     public void selectCheckbox(String field) throws Exception {
-        mortgagePage.click(field);
+        mortgagePage.scrollAndClick(field);
     }
+
+    @When("проеверен \"(.*)\" - \"(.*)\"")
+    public void assertTitle(String field, String value) throws Exception {
+        mortgagePage.assertText(field, value);
+    }
+
 }
