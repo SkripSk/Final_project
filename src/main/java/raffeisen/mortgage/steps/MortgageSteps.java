@@ -10,8 +10,8 @@ public class MortgageSteps {
 
     @When("выпадающий список \"(.*)\" заполняется значением \"(.*)\"")
     public void selectInput(String field, String value) throws Exception {
-        WebElement element = mortgagePage.getField(field);
-        mortgagePage.selectInput(element, value);
+        mortgagePage.waitLoad();
+        mortgagePage.selectInput(mortgagePage.getField(field), value);
     }
 
     @When("отмечен чекбокс - \"(.*)\"")

@@ -6,11 +6,13 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import raffeisen.mortgage.util.DriverManager;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class BasePage {
 
@@ -30,13 +32,24 @@ public class BasePage {
 
 
     public void click(WebElement element) {
-        wait.until(ExpectedConditions.visibilityOf(element)).click();
+        wait.until(ExpectedConditions.elementToBeClickable(element)).click();
+        waitLoad();
+    }
+
+    public void waitLoad(){
+        wait.until((ExpectedCondition<Boolean>)
+                driver -> {
+                    DriverManager.getDriver().manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
+                    return DriverManager.getDriver().findElements(By.xpath("//div[@class='helpers-params loading']")).size() == 0;
+
+                });
+        DriverManager.getDriver().manage().timeouts().implicitlyWait(120, TimeUnit.SECONDS);
     }
 
     public void selectMenuItem(List<WebElement> menuItems, String itemName) {
         for (WebElement item : menuItems) {
             if (item.getText().equalsIgnoreCase(itemName)) {
-                item.click();
+                click(item);
                 return;
             }
         }
@@ -44,7 +57,7 @@ public class BasePage {
     }
 
     public void selectInput(WebElement element, String value) {
-        element.click();
+        click(element);
         element.findElement(By.xpath("//div[contains(@class,'ui-menu-item-wrapper')][contains(text(),'" + value + "')]")).click();
     }
 
